@@ -6,14 +6,12 @@ import com.novaeslucas.corporations.api.model.Corporation;
 import com.novaeslucas.corporations.api.model.CorporationInput;
 import com.novaeslucas.corporations.api.model.PaginacaoDeCorporation;
 import com.novaeslucas.corporations.api.service.SenderMailService;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,9 +45,9 @@ public class CorporationApiController implements CorporationApi {
     @Override
     public ResponseEntity<PaginacaoDeCorporation> getAllCorporations(@Min(0)@ApiParam(value = "O número da página a ser retornada.", defaultValue = "0") @Valid @RequestParam(value = "page", required = false, defaultValue="0") Integer page,@Min(1) @Max(100) @ApiParam(value = "O tamanho da página a ser retornada.", defaultValue = "20") @Valid @RequestParam(value = "size", required = false, defaultValue="20") Integer size) {
         String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
+        if (accept != null && (accept.contains("*/*") || accept.contains("application/json") )  ) {
             try {
-                return new ResponseEntity<PaginacaoDeCorporation>(objectMapper.readValue("{  \"paginaAtual\" : 0,  \"totalDePaginas\" : 6,  \"corporations\" : [ {    \"nome\" : \"nome\",    \"id\" : 0 ,    \"tipo\" : \"Financeiro\"  }, {    \"nome\" : \"nome\",    \"id\" : 0,    \"tipo\" : \"Agro\"  } ]}", PaginacaoDeCorporation.class), HttpStatus.NOT_IMPLEMENTED);
+                return new ResponseEntity<PaginacaoDeCorporation>(objectMapper.readValue("{  \"paginaAtual\" : 0,  \"totalDePaginas\" : 131,  \"corporations\" : [ {    \"nome\" : \"nome\",    \"id\" : 0 ,    \"tipo\" : \"Financeiro\"  }, {    \"nome\" : \"nome\",    \"id\" : 0,    \"tipo\" : \"Agro\"  } ]}", PaginacaoDeCorporation.class), HttpStatus.NOT_IMPLEMENTED);
             } catch (IOException e) {
                 log.error("Couldn't serialize response for content type application/json", e);
                 return new ResponseEntity<PaginacaoDeCorporation>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -62,7 +60,7 @@ public class CorporationApiController implements CorporationApi {
     @Override
     public ResponseEntity<Corporation> insertCorporation(@ApiParam(value = "Dados do corporation a ser criado." ,required=true )  @Valid @RequestBody CorporationInput corporation) {
         String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
+        if (accept != null && (accept.contains("*/*") || accept.contains("application/json") )  ) {
             try {
                 if(corporation.getTipo() != null){
 //                    mailService.enviar("novaeslucas@gmail.com", "teste", "teste de email");

@@ -2,6 +2,8 @@ swagger: '2.0'
 info:
   title: Corporations
   version: 1.0.0
+tags:
+  - name : Corporation
 
 paths:
   /corporation/inserir:
@@ -27,7 +29,7 @@ paths:
   /corporation/getAll:
     get:
       tags:
-        - corporation
+        - Corporation
       summary: Obtém uma lista paginada de corporations.
       description: Retorna uma lista paginada de corporations.
       operationId: getAllCorporations
